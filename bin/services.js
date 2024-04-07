@@ -26,8 +26,6 @@ let startCreateApp = (app_name, options) => {
     } else {
         createApp(app_name, options);
     }
-
-	// .option('-a, --auth <auth>', 'Include jwt authentication set up: [`yes`, `no`]')
 }
 
 let createApp = (app_name, options) => {

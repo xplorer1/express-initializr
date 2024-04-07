@@ -1,15 +1,12 @@
 #!/usr/bin/env node
 
 let { program } = require('commander');
-let path = require('path');
-let TEMPLATE_DIR = path.join(__dirname, '..', 'templates');
 let VERSION = require('../package').version;
 let services = require('./services');
-let supported_dbs = require("./utilities").SUPPORT_DBS;
 
 let figlet = require("figlet");
 console.log("\n", figlet.textSync("NodeJs Initializr"), "\n\n");
-console.log("This will guide you through generating a barebone express app.");
+console.log("This will guide you through generating a barebone NodeJs app with the selected framework.");
 console.log("Press ^C at any time to quit. \n");
 
 let default_app_name = "hello_world"; //If you change this in the future, remember to go change it in the package.json file as well.
