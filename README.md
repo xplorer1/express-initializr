@@ -6,7 +6,7 @@
 ## Installation
 
 ```sh
-$ npm install -g express-i
+$ npm install -g node-init
 ```
 
 ## Quick Start
@@ -14,13 +14,13 @@ $ npm install -g express-i
 Create the app. This will generate an app named `hello_world`.
 
 ```bash
-$ express-i && cd hello_world
+$ node-init && cd hello_world
 ```
 
 Create app with given name :
 
 ```bash
-$ express-i food-app && cd food-app
+$ node-init food-app && cd food-app
 ```
 
 Start your Express.js app and visit it at: `http://localhost:8000`:
