@@ -8,7 +8,7 @@ let services = require('./services');
 let supported_dbs = require("./utilities").SUPPORT_DBS;
 
 let figlet = require("figlet");
-console.log("\n", figlet.textSync("Express Initializr"), "\n\n");
+console.log("\n", figlet.textSync("NodeJs Initializr"), "\n\n");
 console.log("This will guide you through generating a barebone express app.");
 console.log("Press ^C at any time to quit. \n");
 
@@ -18,7 +18,9 @@ program.version(VERSION);
 
 program
 	.argument('[app_name]', 'The name you want to call the app.', default_app_name)
+	.option('-f --framework <framework>', 'Node framework to initialize.', 'express')
 	.action((app_name, options) => {
+		console.log("options: ", options);
 		services.startCreateApp(app_name, options);
 	});
 	

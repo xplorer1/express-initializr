@@ -1,10 +1,12 @@
 {
-  "name": "express-initializr",
-  "description": "Express' application initializer.",
+  "name": "node-initializr",
+  "description": "Node's application initializer.",
   "version": "1.0.0",
   "author": "Chijioke Ugwuanyi <cj@ugwuanyi@gmail.com>",
   "contributors": [],
   "keywords": [
+    "node",
+    "hapi",
     "express",
     "framework",
     "generator",
@@ -15,7 +17,7 @@
     "app",
     "api"
   ],
-  "repository": "xplorer1/express-initializr",
+  "repository": "xplorer1/node-initializr",
   "license": "MIT",
   "dependencies": {
     "commander": "^12.0.0",
@@ -28,7 +30,7 @@
   "main": "bin/initializr-cli.js",
   "preferGlobal": true,
   "bin": {
-    "express-i": "./bin/initializr-cli.js"
+    "node-init": "./bin/initializr-cli.js"
   },
   "devDependencies": {
     "eslint": "7.32.0",
