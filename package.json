@@ -1,0 +1,61 @@
+{
+  "name": "express-initializr",
+  "description": "Express' application initializer.",
+  "version": "1.0.0",
+  "author": "Chijioke Ugwuanyi <cj@ugwuanyi@gmail.com>",
+  "contributors": [],
+  "keywords": [
+    "express",
+    "framework",
+    "generator",
+    "web",
+    "rest",
+    "restful",
+    "router",
+    "app",
+    "api"
+  ],
+  "repository": "expressjs/generator",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.0.0",
+    "figlet": "^1.7.0",
+    "fs-extra": "^11.2.0",
+    "linebyline": "^1.3.0",
+    "readline": "^1.3.0",
+    "readline-sync": "^1.4.10",
+    "yargs": "^17.7.2"
+  },
+  "main": "bin/initializr-cli.js",
+  "preferGlobal": true,
+  "bin": {
+    "express-i": "./bin/initializr-cli.js"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "5.2.0",
+    "eslint-plugin-standard": "4.1.0",
+    "mocha": "9.1.3",
+    "rimraf": "3.0.2",
+    "supertest": "6.1.4",
+    "tree-kill": "1.2.2",
+    "uid-safe": "2.1.5",
+    "validate-npm-package-name": "3.0.0"
+  },
+  "engines": {
+    "node": ">= 0.10"
+  },
+  "files": [
+    "LICENSE",
+    "bin/",
+    "templates/"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha --reporter spec --bail --check-leaks test/",
+    "test-ci": "mocha --reporter spec --check-leaks test/"
+  }
+}
