@@ -34,6 +34,7 @@ let createApp = (app_name, options) => {
     
     let target_path = path.join(process.cwd(), app_name);
     let template_path = path.join(__dirname, '..', 'templates');
+    options["dependencies"] = [];
 
     try {
 
