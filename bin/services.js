@@ -5,11 +5,12 @@ let utilities = require("./utilities");
 let supported_dbs = utilities.SUPPORTED_DBS;
 let supported_mail_clients = utilities.SUPPORTED_MAIL_CLIENTS;
 let supported_auth_providers = utilities.SUPPORT_AUTH_PROVIDERS;
-let default_dependencies = utilities.DEFAULT_DEPENDENCIES;
+let backend_apps = utilities.BACKEND_APPS;
 
 let readline_sync = require('readline-sync');
 
 let startCreateApp = (app_name, options) => {
+    let is_backend = backend_apps.includes(options.framework);
 
     let target_path = path.join(process.cwd(), app_name);
     if(fs.existsSync(target_path) ) {
@@ -17,42 +18,75 @@ let startCreateApp = (app_name, options) => {
         let folder_confirm = readline_sync.keyInYN(`There is a folder with the name ${app_name} in this location. Okay to delete and continue? `);
         if(folder_confirm) {
             fs.removeSync(target_path);
-            createApp(app_name, options);
+            createApp(app_name, options, is_backend);
+
         } else {
             console.log("Aborting...");
             process.exit(1);
         }
 
     } else {
-        createApp(app_name, options);
+        createApp(app_name, options, is_backend);
     }
 }
 
-let createApp = (app_name, options) => {
-    
-    let target_path = path.join(process.cwd(), app_name);
-    let template_path = path.join(__dirname, '..', 'templates');
+let createApp = (app_name, options, is_backend) => {
     options["dependencies"] = [];
 
     try {
 
+        let target_path = path.join(process.cwd(), app_name);
+        let template_path = '';
+        switch (options.framework) {
+            case "express":
+                template_path = path.join(__dirname, '..', 'templates/express_template');
+                break;
+            case "react":
+                template_path = path.join(__dirname, '..', 'templates/react_template');
+                break;
+            case "hapi":
+                template_path = path.join(__dirname, '..', 'templates/hapi_template');
+                break;
+            case "nest":
+                template_path = path.join(__dirname, '..', 'templates/nest_template');
+                break;
+            case "next":
+                template_path = path.join(__dirname, '..', 'templates/next_template');
+                break;
+        }
+
         fs.copySync(template_path, target_path); //Copy template files.
 
-        let dependencies_input = readline_sync.question("SPACE delimited list of dependencies to include? ");
+        let dependencies_input = readline_sync.question("'SPACE' delimited list of dependencies to include? ");
+        let _dependencies = utilities.getDefaultDependencies(options.framework);;
         if(dependencies_input) {
-            // Normalize the input by replacing commas with spaces.
+            // Normalize the input by replacing commas with spaces for folks that would still add commas to the dependencies list.
             dependencies_input = dependencies_input.replace(/,/g, '');
 
             // Split the normalized input string into an array using spaces as the separator.
             dependencies_input = dependencies_input.split(' ');
 
-            let _dependencies = default_dependencies;
             let filtered_list = dependencies_input.filter( element => !_dependencies.includes( element ) );
             _dependencies = _dependencies.concat(filtered_list);
-
-            options["dependencies"] = _dependencies;
         }
 
+        options["dependencies"] = _dependencies;
+
+        if(is_backend) {
+            handleBackendConfigurations(app_name, options);
+        } else {
+            handlePackageJsonFile(app_name, options);
+        }
+
+    } catch (err) {
+        console.error(`Error generating '${options.framework}' app: ${err}`);
+        process.exit(0);
+    }
+};
+
+let handleBackendConfigurations = (app_name, options) => {
+
+    try {
         let db_input = readline_sync.question(`Include database set up? Supported databases: ${supported_dbs.join(", ")}: `);
         if(db_input && !supported_dbs.includes(db_input)) {
             readline_sync.question(`Invalid database name. Supported databases include: ${supported_dbs.join(", ")}. Please try again.`);
@@ -105,24 +139,30 @@ let createApp = (app_name, options) => {
         }
 
         handlePackageJsonFile(app_name, options);
-
-    } catch (err) {
-        console.error(`Error generating express app: ${err}`);
+    } catch (error) {
+        console.error(`Error creating backend specific configurations: ${error}`);
         process.exit(0);
     }
-};
+}
 
 let handlePackageJsonFile = (app_name, options) => {
     let target_path = path.join(process.cwd(), app_name);
 
     let package_defaults = {
         "name": app_name,
-        "description": "Node.Js application.",
+        "description": options.framework + " application.",
         "version": "1.0.0",
         "scripts": {
             "start": "node server.js"
         }
     };
+
+    if(!is_backend) {
+        package_defaults["scripts"]["start"] = "react-scripts start";
+        package_defaults["scripts"]["build"] = "react-scripts build";
+        package_defaults["scripts"]["test"] = "react-scripts test";
+        package_defaults["scripts"]["eject"] = "react-scripts eject";
+    }
 
     let json_data = JSON.stringify(package_defaults);
     let dependencies = options.dependencies || [];
@@ -132,10 +172,12 @@ let handlePackageJsonFile = (app_name, options) => {
         fs.writeFileSync(target_path + "/package.json", json_data, { spaces: '\t' });
         if(dependencies) {
             //Install dependencies.
-            child_process.execSync(`cd ${target_path} && npm install ${dependencies.join(' ')}`, { stdio: 'inherit' });
+            console.log("Installing packages. This might take a couple of minutes.\n");
+            console.log("Installing: ", dependencies.join(' '));
+            //child_process.execSync(`cd ${target_path} && npm install ${dependencies.join(' ')}`, { stdio: 'inherit' });
         }
         
-        console.log(`Express app '${app_name}' generated successfully.`);
+        console.log(`${options.framework} app '${app_name}' generated successfully.`);
 
     } catch (error) {
         console.error(`Error creating package json file: ${error}`);

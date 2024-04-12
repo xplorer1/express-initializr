@@ -17,7 +17,6 @@ program
 	.argument('[app_name]', 'The name you want to call the app.', default_app_name)
 	.option('-f --framework <framework>', 'Node framework to initialize.', 'express')
 	.action((app_name, options) => {
-		console.log("options: ", options);
 		services.startCreateApp(app_name, options);
 	});
 	

@@ -1,6 +1,5 @@
 let readline = require('readline');
 
-
 let confirmAction = (msg, callback) => {
     let confirm = readline.createInterface({
         input: process.stdin,
@@ -14,15 +13,26 @@ let confirmAction = (msg, callback) => {
     })
 }
 
+let getDefaultDependencies = (framework) => {
+    switch (framework) {
+        case "express":
+            return ["dotenv", "cookie-parser", "morgan", "express", "cors", "helmet", "winston", "joi"];
+            break;
+        case "react": 
+            return ["@testing-library/jest-dom", "@testing-library/react", "@testing-library/user-event", "react", "react-dom", "react-scripts"];
+    }
+}
+
 let SUPPORTED_DBS = ["mongo", "postgres", "mysql", "mssql", "sqlite", "maria"];
 let SUPPORTED_MAIL_CLIENTS = ["nodemailer"];
 let SUPPORT_AUTH_PROVIDERS = ["jsonwebtoken"];
-let DEFAULT_DEPENDENCIES = ["dotenv", "cookie-parser", "morgan", "express", "cors", "helmet", "winston", "joi"];
+let BACKEND_APPS = ["express", "hapi", "next"];
 
 module.exports = {
     confirmAction: confirmAction,
     SUPPORTED_DBS: SUPPORTED_DBS,
     SUPPORTED_MAIL_CLIENTS: SUPPORTED_MAIL_CLIENTS,
     SUPPORT_AUTH_PROVIDERS: SUPPORT_AUTH_PROVIDERS,
-    DEFAULT_DEPENDENCIES: DEFAULT_DEPENDENCIES
+    getDefaultDependencies: getDefaultDependencies,
+    BACKEND_APPS: BACKEND_APPS
 }
