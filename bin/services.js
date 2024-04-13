@@ -76,7 +76,7 @@ let createApp = (app_name, options, is_backend) => {
         if(is_backend) {
             handleBackendConfigurations(app_name, options);
         } else {
-            handlePackageJsonFile(app_name, options);
+            handlePackageJsonFile(app_name, options, is_backend);
         }
 
     } catch (err) {
@@ -146,7 +146,7 @@ let handleBackendConfigurations = (app_name, options) => {
     }
 }
 
-let handlePackageJsonFile = (app_name, options) => {
+let handlePackageJsonFile = (app_name, options, is_backend) => {
     let target_path = path.join(process.cwd(), app_name);
 
     let package_defaults = {
@@ -163,19 +163,24 @@ let handlePackageJsonFile = (app_name, options) => {
         package_defaults["scripts"]["build"] = "react-scripts build";
         package_defaults["scripts"]["test"] = "react-scripts test --watchAll --coverage";
         package_defaults["scripts"]["eject"] = "react-scripts eject";
+        package_defaults["browserslist"] = {};
+        package_defaults["browserslist"]["production"] = [ ">0.2%", "not dead", "not op_mini all"];
+        package_defaults["browserslist"]["development"] = [ "last 1 chrome version", "last 1 firefox version", "last 1 safari version"];
     }
 
-    let json_data = JSON.stringify(package_defaults);
     let dependencies = options.dependencies || [];
 
     try {
         
-        fs.writeFileSync(target_path + "/package.json", json_data, { spaces: '\t' });
+        fs.outputJSON(target_path + "/package.json", package_defaults, { spaces: '\t' }) 
+            .then(() => console.log("File created and data written successfully.")) 
+            .catch((e) => console.log(e)); 
+
         if(dependencies) {
             //Install dependencies.
             console.log("Installing packages. This might take a couple of minutes.\n");
             console.log("Installing: ", dependencies.join(' '));
-            //child_process.execSync(`cd ${target_path} && npm install ${dependencies.join(' ')}`, { stdio: 'inherit' });
+            child_process.execSync(`cd ${target_path} && npm install ${dependencies.join(' ')}`, { stdio: 'inherit' });
         }
         
         console.log(`${options.framework} app '${app_name}' generated successfully.`);
