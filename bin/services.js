@@ -155,7 +155,9 @@ let handlePackageJsonFile = (app_name, options, is_backend) => {
         "version": "1.0.0",
         "scripts": {
             "start": "node server.js"
-        }
+        },
+        "dependencies": {},
+        "devDependencies": {}
     };
 
     if(!is_backend) {
@@ -180,6 +182,8 @@ let handlePackageJsonFile = (app_name, options, is_backend) => {
             //Install dependencies.
             console.log("Installing packages. This might take a couple of minutes.\n");
             console.log("Installing: ", dependencies.join(' '));
+
+            //You need to figure out how to separate the installation of regular and dev dependencies. Now they are being installed as regular.
             child_process.execSync(`cd ${target_path} && npm install ${dependencies.join(' ')}`, { stdio: 'inherit' });
         }
         
