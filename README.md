@@ -1,4 +1,4 @@
-[![NodeJs Logo](https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg)](https://nodejs.org/en/)
+[![NodeJs Logo](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Node.js_logo_2015.svg/591px-Node.js_logo_2015.svg.png)](https://nodejs.org/en/)
 
 ## Installation
 

@@ -1,17 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import Home from "./components/home";
+import About from "./components/about";
+import Contact from "./components/about";
+import Profile from "./components/profile";
+import NotFound from "./components/not_found";
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const App = () => {
+	return (
+		<Router>
+			<Switch>
+				<Route index path='/' component={Home} />
+				<Route exact path='/about' component={About} />
+				<Route exact path='/contact' component={Contact} />
+				<Route exact path='/profile/:profile_id' component={Profile} />
+				<Route path='*' component={NotFound} />
+			</Switch>
+		</Router>
+	)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));

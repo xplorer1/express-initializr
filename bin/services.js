@@ -58,7 +58,7 @@ let createApp = (app_name, options, is_backend) => {
         fs.copySync(template_path, target_path); //Copy template files.
 
         let dependencies_input = readline_sync.question("'SPACE' delimited list of dependencies to include? ");
-        let _dependencies = utilities.getDefaultDependencies(options.framework);;
+        let _dependencies = utilities.getDefaultDependencies(options.framework);
         if(dependencies_input) {
             // Normalize the input by replacing commas with spaces for folks that would still add commas to the dependencies list.
             dependencies_input = dependencies_input.replace(/,/g, '');
@@ -66,6 +66,7 @@ let createApp = (app_name, options, is_backend) => {
             // Split the normalized input string into an array using spaces as the separator.
             dependencies_input = dependencies_input.split(' ');
 
+            //Filter out dependencies from user input that are already part of the default dependencies.
             let filtered_list = dependencies_input.filter( element => !_dependencies.includes( element ) );
             _dependencies = _dependencies.concat(filtered_list);
         }
@@ -160,7 +161,7 @@ let handlePackageJsonFile = (app_name, options) => {
     if(!is_backend) {
         package_defaults["scripts"]["start"] = "react-scripts start";
         package_defaults["scripts"]["build"] = "react-scripts build";
-        package_defaults["scripts"]["test"] = "react-scripts test";
+        package_defaults["scripts"]["test"] = "react-scripts test --watchAll --coverage";
         package_defaults["scripts"]["eject"] = "react-scripts eject";
     }
 

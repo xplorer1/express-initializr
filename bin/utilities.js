@@ -19,7 +19,7 @@ let getDefaultDependencies = (framework) => {
             return ["dotenv", "cookie-parser", "morgan", "express", "cors", "helmet", "winston", "joi"];
             break;
         case "react": 
-            return ["@testing-library/jest-dom", "@testing-library/react", "@testing-library/user-event", "react", "react-dom", "react-scripts"];
+            return ["@testing-library/jest-dom", "@testing-library/react", "@testing-library/user-event", "react", "react-dom", "react-scripts", "react-router-dom"];
     }
 }
 
