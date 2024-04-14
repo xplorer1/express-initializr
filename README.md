@@ -8,7 +8,7 @@ $ npm install -g node-initializr
 
 ## Quick Start
 
-node-initializr will generate boilerplate code for popular NodeJs frameworks. At this moment, it supports express and react. Support for other frameworks will come with later versions.
+node-initializr will generate boilerplate code for popular NodeJs frameworks. At this moment, it supports `express` and `react`. Support for other frameworks will come with later versions.
 It tries to be opinionated in the way it defines the folder structure and code organisation.
 
 Defaults:
