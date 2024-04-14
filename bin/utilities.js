@@ -27,6 +27,7 @@ let SUPPORTED_DBS = ["mongo", "postgres", "mysql", "mssql", "sqlite", "maria"];
 let SUPPORTED_MAIL_CLIENTS = ["nodemailer"];
 let SUPPORT_AUTH_PROVIDERS = ["jsonwebtoken"];
 let BACKEND_APPS = ["express", "hapi", "next"];
+let SUPPORTED_CSS_LIBS = ["bootstrap", "antd", "material"]; //"foundation", "tailwind", "semantic"
 
 module.exports = {
     confirmAction: confirmAction,
@@ -34,5 +35,6 @@ module.exports = {
     SUPPORTED_MAIL_CLIENTS: SUPPORTED_MAIL_CLIENTS,
     SUPPORT_AUTH_PROVIDERS: SUPPORT_AUTH_PROVIDERS,
     getDefaultDependencies: getDefaultDependencies,
-    BACKEND_APPS: BACKEND_APPS
+    BACKEND_APPS: BACKEND_APPS,
+    SUPPORTED_CSS_LIBS: SUPPORTED_CSS_LIBS
 }

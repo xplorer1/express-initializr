@@ -5,6 +5,7 @@ let utilities = require("./utilities");
 let supported_dbs = utilities.SUPPORTED_DBS;
 let supported_mail_clients = utilities.SUPPORTED_MAIL_CLIENTS;
 let supported_auth_providers = utilities.SUPPORT_AUTH_PROVIDERS;
+let supported_css_libs = utilities.SUPPORTED_CSS_LIBS;
 let backend_apps = utilities.BACKEND_APPS;
 
 let readline_sync = require('readline-sync');
@@ -81,16 +82,31 @@ let createApp = (app_name, options, is_backend) => {
 
     } catch (err) {
         console.error(`Error generating '${options.framework}' app: ${err}`);
-        process.exit(0);
+        process.exit(1);
     }
 };
+
+let handleCssConfiguration = (app_name, options) => {
+    try {
+        let css_lib = readline_sync.question(`CSS library to include? Supported libraries: ${supported_css_libs.join(", ")}: `);
+        if(css_lib && !supported_css_libs.includes(css_lib)) {
+            console.log(`Invalid css library. Supported libraries include: ${supported_css_libs.join(", ")}. Please try again.`);
+            process.exit(1);
+        }
+
+    } catch (error) {
+        console.error(`Error adding css library: ${err}`);
+        process.exit(1);
+    }
+}
 
 let handleBackendConfigurations = (app_name, options) => {
 
     try {
         let db_input = readline_sync.question(`Include database set up? Supported databases: ${supported_dbs.join(", ")}: `);
         if(db_input && !supported_dbs.includes(db_input)) {
-            readline_sync.question(`Invalid database name. Supported databases include: ${supported_dbs.join(", ")}. Please try again.`);
+            console.log(`Invalid database name. Supported databases include: ${supported_dbs.join(", ")}. Please try again.`);
+            process.exit(1);
         } else {
 
             switch (db_input) {
@@ -125,7 +141,8 @@ let handleBackendConfigurations = (app_name, options) => {
 
         let mail_input = readline_sync.question(`Include mail set up? Supported mail clients: ${supported_mail_clients.join(", ")}: `);
         if(mail_input && !supported_mail_clients.includes(mail_input)) {
-            readline_sync.question(`Invalid mail client. Supported mail clients include: ${supported_mail_clients.join(", ")}. Please try again.`);
+            console.log(`Invalid mail client. Supported mail clients include: ${supported_mail_clients.join(", ")}. Please try again.`);
+            process.exit(1);
         } else {
             options["dependencies"].push(mail_input);
             handleMailSetup(app_name);
@@ -133,7 +150,8 @@ let handleBackendConfigurations = (app_name, options) => {
 
         let auth_input = readline_sync.question(`Include authentication set up? Supported authentication providers: ${supported_auth_providers.join(", ")}: `);
         if(auth_input && !supported_auth_providers.includes(mail_input)) {
-            readline_sync.question(`Invalid authentication providers. Supported providers include: ${supported_auth_providers.join(", ")}. Please try again.`);
+            console.log(`Invalid authentication providers. Supported providers include: ${supported_auth_providers.join(", ")}. Please try again.`);
+            process.exit(1);
         } else {
             options["dependencies"].push(auth_input);
             handleAuthSetUp(app_name);
@@ -142,7 +160,7 @@ let handleBackendConfigurations = (app_name, options) => {
         handlePackageJsonFile(app_name, options);
     } catch (error) {
         console.error(`Error creating backend specific configurations: ${error}`);
-        process.exit(0);
+        process.exit(1);
     }
 }
 
@@ -184,6 +202,7 @@ let handlePackageJsonFile = (app_name, options, is_backend) => {
             console.log("Installing: ", dependencies.join(' '));
 
             //You need to figure out how to separate the installation of regular and dev dependencies. Now they are being installed as regular.
+            //Also figure out why dependencies aren't being created in the package.json folder after their installation.
             child_process.execSync(`cd ${target_path} && npm install ${dependencies.join(' ')}`, { stdio: 'inherit' });
         }
         
@@ -191,7 +210,7 @@ let handlePackageJsonFile = (app_name, options, is_backend) => {
 
     } catch (error) {
         console.error(`Error creating package json file: ${error}`);
-        process.exit(0);
+        process.exit(1);
     }
 }
 
@@ -214,7 +233,7 @@ conn.on('error', function(err) {
 
     } catch (error) {
         console.error(`Error creating mongo db set up: ${error}`);
-        process.exit(0);
+        process.exit(1);
     }
 }
 
@@ -240,7 +259,7 @@ sequelize.authenticate().then(() => {
 
     } catch (error) {
         console.error(`Error creating sql db set up: ${error}`);
-        process.exit(0);
+        process.exit(1);
     }
 }
 
@@ -261,7 +280,7 @@ let transporter = nodemailer.createTransport({
 
     } catch (error) {
         console.error(`Error creating mail service set up: ${error}`);
-        process.exit(0);
+        process.exit(1);
     }
 }
 
@@ -305,7 +324,7 @@ module.exports = {
 
     } catch (error) {
         console.error(`Error creating mail service set up: ${error}`);
-        process.exit(0);
+        process.exit(1);
     }
 }
 

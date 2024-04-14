@@ -22,7 +22,7 @@ Create the app.
 $ node-init
 ```
 
-This will generate an express app named `hello_world` in the current working directory and install the dependencies required to get your application started.
+This will guide you through generating an express app named `hello_world` in the current working directory and install the dependencies required to get your application started.
 
 Create an express app with given name:
 
