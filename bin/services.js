@@ -18,6 +18,7 @@ let startCreateApp = (app_name, options) => {
 
         let folder_confirm = readline_sync.keyInYN(`There is a folder with the name ${app_name} in this location. Okay to delete and continue? `);
         if(folder_confirm) {
+            console.log("Removing folder...this might take a moment.");
             fs.removeSync(target_path);
             createApp(app_name, options, is_backend);
 
@@ -77,7 +78,7 @@ let createApp = (app_name, options, is_backend) => {
         if(is_backend) {
             handleBackendConfigurations(app_name, options);
         } else {
-            handlePackageJsonFile(app_name, options, is_backend);
+            handleFrontendConfiguration(app_name, options);
         }
 
     } catch (err) {
@@ -86,13 +87,28 @@ let createApp = (app_name, options, is_backend) => {
     }
 };
 
-let handleCssConfiguration = (app_name, options) => {
+let handleFrontendConfiguration = (app_name, options) => {
     try {
         let css_lib = readline_sync.question(`CSS library to include? Supported libraries: ${supported_css_libs.join(", ")}: `);
         if(css_lib && !supported_css_libs.includes(css_lib)) {
             console.log(`Invalid css library. Supported libraries include: ${supported_css_libs.join(", ")}. Please try again.`);
             process.exit(1);
+        } else {
+
+            switch (css_lib) {
+                case "bootstrap":
+                    options["dependencies"].push("bootstrap");
+                    break;
+                case "antd":
+                    options["dependencies"].push("antd");
+                    break;
+                case "material":
+                    options["dependencies"].push("@mui/material", "@emotion/react", "@emotion/styled");
+                    break;
+            }
         }
+
+        handlePackageJsonFile(app_name, options, false);
 
     } catch (error) {
         console.error(`Error adding css library: ${err}`);
@@ -157,7 +173,7 @@ let handleBackendConfigurations = (app_name, options) => {
             handleAuthSetUp(app_name);
         }
 
-        handlePackageJsonFile(app_name, options);
+        handlePackageJsonFile(app_name, options, true);
     } catch (error) {
         console.error(`Error creating backend specific configurations: ${error}`);
         process.exit(1);
