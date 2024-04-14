@@ -1,7 +1,7 @@
 {
   "name": "node-initializr",
   "description": "Node's application initializer.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Chijioke Ugwuanyi <cj@ugwuanyi@gmail.com>",
   "contributors": [],
   "keywords": [
